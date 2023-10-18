@@ -12,9 +12,8 @@
 
 	<name>Explore With Me</name>
     <modules>
-        <module>explore-with-me-statistic_server</module>
-		<module>explore-with-me-statistic_server/stat-service</module>
-        <module>explore-with-me-main_server</module>
+        <module>explore-with-me-statistic_service</module>
+		<module>explore-with-me-statistic_service/</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
