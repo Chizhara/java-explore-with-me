@@ -42,7 +42,6 @@ public class StatsServiceImp implements StatsService {
                 return endpointHitRepository.findAllViewStats(start, end, uris);
             }
         }
-
     }
 
 }

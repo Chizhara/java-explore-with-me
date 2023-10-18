@@ -4,9 +4,6 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.model.EndpointHit;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 @UtilityClass
 public class EndpointHitMapper {
 

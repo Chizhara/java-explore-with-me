@@ -48,7 +48,6 @@ public class EndpointHitRepositoryImp implements EndpointHitRepository {
 
         return jdbcOperations.query(sql, Map.of("start", start, "end", end),
                 (rs, rowNum) -> ViewStatsMapper.toViewStats(rs));
-
     }
 
     public List<ViewStats> findAllViewStats(LocalDateTime start, LocalDateTime end, String[] uris) {
@@ -60,7 +59,6 @@ public class EndpointHitRepositoryImp implements EndpointHitRepository {
 
         return jdbcOperations.query(sql, Map.of("start", start, "end", end, "uris", Arrays.asList(uris)),
                 (rs, rowNum) -> ViewStatsMapper.toViewStats(rs));
-
     }
 
     public List<ViewStats> findAllViewStatsByUniqueIp(LocalDateTime start, LocalDateTime end, String[] uris) {
@@ -72,7 +70,6 @@ public class EndpointHitRepositoryImp implements EndpointHitRepository {
 
         return jdbcOperations.query(sql, Map.of("start", start, "end", end, "uris", Arrays.asList(uris)),
                 (rs, rowNum) -> ViewStatsMapper.toViewStats(rs));
-
     }
 
     private MapSqlParameterSource makeMap(EndpointHit endpointHit) {

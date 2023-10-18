@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.model.ViewStats;
 
-import javax.swing.tree.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;

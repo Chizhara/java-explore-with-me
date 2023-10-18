@@ -1,7 +1,6 @@
 package ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,11 +14,18 @@ import javax.validation.ValidationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
+
+    static ApiError handleException(HttpStatus status, Exception e, final String message) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pr = new PrintWriter(sw);
+        e.printStackTrace(pr);
+        String stackTrace = sw.toString();
+        return new ApiError(status, message, e.getMessage(), stackTrace);
+    }
 
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
@@ -53,14 +59,6 @@ public class ErrorHandler {
     public ApiError handleUntrackedException(final Exception e, HttpStatus status) {
         log.error("ERROR Unhandled Error 500! {}", e.getClass());
         return handleException(status, e, "Error: untracked error");
-    }
-
-    static ApiError handleException(HttpStatus status, Exception e, final String message) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pr = new PrintWriter(sw);
-        e.printStackTrace(pr);
-        String stackTrace = sw.toString();
-        return new ApiError(status, message, e.getMessage(), stackTrace);
     }
 
 
