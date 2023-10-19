@@ -19,14 +19,6 @@ import java.sql.SQLException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    static ApiError handleException(HttpStatus status, Exception e, final String message) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pr = new PrintWriter(sw);
-        e.printStackTrace(pr);
-        String stackTrace = sw.toString();
-        return new ApiError(status, message, e.getMessage(), stackTrace);
-    }
-
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             ConstraintViolationException.class,
@@ -61,5 +53,12 @@ public class ErrorHandler {
         return handleException(status, e, "Error: untracked error");
     }
 
+    private static ApiError handleException(HttpStatus status, Exception e, final String message) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pr = new PrintWriter(sw);
+        e.printStackTrace(pr);
+        String stackTrace = sw.toString();
+        return new ApiError(status, message, e.getMessage(), stackTrace);
+    }
 
 }
