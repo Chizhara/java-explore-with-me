@@ -1,8 +1,10 @@
 package ru.practicum;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
@@ -17,14 +19,12 @@ import java.util.Optional;
 @Service
 public class StatClient {
 
-    private static final String BASE_URL = "http://localhost:9090";
-
     public final WebClient webClient;
 
     @Autowired
-    public StatClient() {
+    public StatClient(@Value("${stat-server.url}") String base_url) {
         webClient = WebClient.builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(base_url)
                 .build();
     }
 
@@ -51,7 +51,7 @@ public class StatClient {
                         .queryParam("start", start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                         .queryParam("end", end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                         .queryParamIfPresent("uris", Optional.of(array))
-                        .queryParamIfPresent("unique", Optional.of(unique))
+                        .queryParamIfPresent("unique", Optional.ofNullable(unique))
                         .build())
                 .retrieve()
                 .toEntityList(ViewStatsDto.class)

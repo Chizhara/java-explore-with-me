@@ -2,10 +2,8 @@ package ru.practicum.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ViewStatsDto {

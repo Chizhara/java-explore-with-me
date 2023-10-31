@@ -1,9 +1,11 @@
 package ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,7 +13,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -23,7 +24,8 @@ public class ErrorHandler {
             MethodArgumentNotValidException.class,
             ConstraintViolationException.class,
             ValidationException.class,
-            HttpMessageNotReadableException.class})
+            HttpMessageNotReadableException.class,
+            MissingServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleValidationException(final RuntimeException e) {
         log.error("ERROR Validation 400! {}", e.getMessage());
@@ -39,14 +41,28 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleDataIntegrityViolationException(final SQLException e) {
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         log.error("ERROR SQLException 409! {}", e.getMessage());
-        return handleException(HttpStatus.CONFLICT, e, "Error: database error");
+        return handleException(HttpStatus.CONFLICT, e, "Integrity constraint has been violated.");
+    }
+
+    @ExceptionHandler({InvalidValueException.class, EventIncorrectException.class, InvalidActionException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleInvalidValueException(final RuntimeException e) {
+        log.error("ERROR invalid data 409! {}", e.getMessage());
+        return handleException(HttpStatus.CONFLICT, e, "For the requested operation the conditions are not met.");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNoFoundException(final NotFoundException e) {
+        log.error("ERROR SQLException 404! {}", e.getMessage());
+        return handleException(HttpStatus.NOT_FOUND, e, "The required object not found.");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleUntrackedException(final Exception e, HttpStatus status) {
+    public ApiError handleUntrackedException(final Exception e) {
         log.error("ERROR Unhandled Error 500! {}", e.getClass());
         return handleException(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error: untracked error");
     }
