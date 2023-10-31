@@ -2,14 +2,13 @@ package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.practicum.model.event.Event;
 import ru.practicum.model.event.dto.EventFullDto;
 import ru.practicum.model.event.dto.EventShortDto;
 import ru.practicum.model.event.dto.NewEventDto;
-import ru.practicum.model.event.Event;
 import ru.practicum.model.request.ParticipationRequestStatus;
 
 import java.util.Collection;
-import java.util.Set;
 
 @Mapper(uses = {UserMapper.class, CategoryMapper.class}, imports = {ParticipationRequestStatus.class})
 public interface EventMapper {

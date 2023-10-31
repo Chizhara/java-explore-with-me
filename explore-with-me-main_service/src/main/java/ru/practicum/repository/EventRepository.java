@@ -7,6 +7,6 @@ import ru.practicum.model.event.EventState;
 
 import java.util.Optional;
 
-public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event>{
+public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
     Optional<Event> findByIdAndState(long id, EventState state);
 }

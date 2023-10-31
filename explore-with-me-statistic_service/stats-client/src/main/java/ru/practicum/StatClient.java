@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
@@ -22,9 +21,9 @@ public class StatClient {
     public final WebClient webClient;
 
     @Autowired
-    public StatClient(@Value("${stat-server.url}") String base_url) {
+    public StatClient(@Value("${stat-server.url}") String baseUrl) {
         webClient = WebClient.builder()
-                .baseUrl(base_url)
+                .baseUrl(baseUrl)
                 .build();
     }
 

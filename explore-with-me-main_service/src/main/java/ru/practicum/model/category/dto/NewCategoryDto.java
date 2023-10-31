@@ -1,7 +1,6 @@
 package ru.practicum.model.category.dto;
 
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

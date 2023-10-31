@@ -1,18 +1,18 @@
 package ru.practicum.model.compilation.dto;
 
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 public class NewCompilationDto {
 
     @NotBlank
-    @Length(min = 1, max = 50)
+    @Size(min = 1, max = 50)
     private String title;
     private Boolean pinned;
-    private Collection<Long> events;
+    private Set<Long> events;
 
 }

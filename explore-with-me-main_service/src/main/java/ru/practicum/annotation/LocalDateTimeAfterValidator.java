@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Slf4j

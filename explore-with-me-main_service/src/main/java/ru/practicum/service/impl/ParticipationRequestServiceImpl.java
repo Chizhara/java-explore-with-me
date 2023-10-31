@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.InvalidActionException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventState;
 import ru.practicum.model.request.EventRequestStatusUpdateRequest;
 import ru.practicum.model.request.EventRequestStatusUpdateResult;
-import ru.practicum.model.event.Event;
 import ru.practicum.model.request.ParticipationRequest;
 import ru.practicum.model.request.ParticipationRequestStatus;
 import ru.practicum.repository.ParticipationRequestRepository;
@@ -76,7 +76,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     public EventRequestStatusUpdateResult updateRequests(long userId, long eventId,
                                                          EventRequestStatusUpdateRequest requestUpdateRequest) {
         log.debug("Invoked method updateRequests of class ParticipationRequestServiceImpl " +
-                "with parameters: userId = {}, eventId = {}, requestUpdateRequest = {};",
+                        "with parameters: userId = {}, eventId = {}, requestUpdateRequest = {};",
                 userId, eventId, requestUpdateRequest);
 
         Event event = eventService.getEvent(userId, eventId);
@@ -94,16 +94,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 new ArrayList<>(requestUpdateRequest.getRequestIds().size() + 1);
 
         requests.forEach(request -> {
-            if (request.getStatus()!=ParticipationRequestStatus.PENDING &&
-                    !requestUpdateRequest.getRequestIds().contains(request.getId())) {
-                throw new InvalidActionException("Request must have status PENDING");
-            }
-
             switch (request.getStatus()) {
                 case CONFIRMED:
+                    validateRequestIdsNotIn(request, requestUpdateRequest.getRequestIds());
                     confirmedRequests.add(request);
                     break;
                 case REJECTED:
+                    validateRequestIdsNotIn(request, requestUpdateRequest.getRequestIds());
                     rejectedRequests.add(request);
                     break;
                 case PENDING:
@@ -118,10 +115,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             }
         });
 
-        if (event.getParticipantLimit() != 0 && confirmedRequests.size() >= event.getParticipantLimit()) {
-            pendingRequests.forEach(pendingRequest -> pendingRequest.setStatus(ParticipationRequestStatus.REJECTED));
-        }
-
         switch (requestUpdateRequest.getStatus()) {
             case CONFIRMED:
                 confirmedRequests.addAll(updatedRequests);
@@ -129,7 +122,11 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 rejectedRequests.addAll(updatedRequests);
         }
 
-        tempRequests.addAll(pendingRequests);
+        if (event.getParticipantLimit() != 0 && confirmedRequests.size() >= event.getParticipantLimit()) {
+            pendingRequests.forEach(pendingRequest -> pendingRequest.setStatus(ParticipationRequestStatus.REJECTED));
+            tempRequests.addAll(pendingRequests);
+        }
+
         participationRequestRepository.saveAll(tempRequests);
 
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
@@ -137,7 +134,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     private ParticipationRequest initRequest(long userId, long eventId) {
         Optional<ParticipationRequest> requestOptional = checkCanceledRequest(userId, eventId);
-        if(requestOptional.isPresent()) {
+        if (requestOptional.isPresent()) {
             ParticipationRequest request = requestOptional.get();
             request.setStatus(ParticipationRequestStatus.PENDING);
             return request;
@@ -163,6 +160,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 ParticipationRequestStatus.CANCELED);
     }
 
+    private void validateRequestIdsNotIn(ParticipationRequest request, Collection<Long> reqsId) {
+        if (!reqsId.contains(request.getId())) {
+            throw new InvalidActionException("Request must have status PENDING");
+        }
+    }
+
     private void validateParticipationRequest(ParticipationRequest request) {
         if (request.getEvent().getState() != EventState.PUBLISHED) {
             throw new InvalidActionException(
@@ -176,6 +179,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         }
         validateEventRequestsCount(request.getEvent());
     }
+
     private void validateEventRequestsModeration(Event event) {
         if (event.getState() != EventState.PUBLISHED) {
             throw new InvalidActionException(

@@ -6,7 +6,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
@@ -16,11 +16,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(StateActionOneOf.List.class)
 public @interface StateActionOneOf {
     String message() default "Invalid StateAction value";
+
     StateAction[] anyOf();
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ FIELD })
+    @Target({FIELD})
     @Retention(RUNTIME)
     @Documented
     public @interface List {

@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StatService {
+    private static final String APP = "ewm-main-service";
     protected final HttpServletRequest request;
     protected final StatClient statClient;
-    private static final String APP = "ewm-main-service";
+
     public void save() {
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
                 .app(APP)
@@ -45,7 +46,7 @@ public class StatService {
         Map<Long, Long> idsViews = new HashMap<>(eventsId.size() + 1, 1);
 
         for (ViewStatsDto viewStatsDto : viewStats) {
-            idsViews.put((long)Integer.parseInt(viewStatsDto.getUri().split("/")[2]), viewStatsDto.getHits());
+            idsViews.put((long) Integer.parseInt(viewStatsDto.getUri().split("/")[2]), viewStatsDto.getHits());
         }
         return idsViews;
     }
@@ -55,7 +56,7 @@ public class StatService {
                 "with parameters: eventId = {}, rangeStart = {};", eventId, rangeStart);
         List<ViewStatsDto> viewStatsDto = statClient.getViewStats(rangeStart, LocalDateTime.now().plusMinutes(1),
                 List.of("/events/" + eventId), true);
-        if(viewStatsDto.isEmpty()) {
+        if (viewStatsDto.isEmpty()) {
             return 0L;
         }
         return viewStatsDto.get(0).getHits();

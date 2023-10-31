@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mapper.ParticipationRequestMapper;
-import ru.practicum.model.request.dto.ParticipationRequestDto;
 import ru.practicum.model.request.ParticipationRequestStatus;
+import ru.practicum.model.request.dto.ParticipationRequestDto;
 import ru.practicum.service.ParticipationRequestService;
 
 import java.util.Collection;

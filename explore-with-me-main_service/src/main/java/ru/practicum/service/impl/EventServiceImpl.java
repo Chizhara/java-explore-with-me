@@ -15,6 +15,7 @@ import ru.practicum.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -48,6 +49,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public Collection<Event> getEvents(int from, int size) {
         return eventRepository.findAll(PageableGenerator.getPageable(from, size)).getContent();
+    }
+
+    @Override
+    public Collection<Event> getEvents(Set<Long> eventsId) {
+        return eventRepository.findAllById(eventsId);
     }
 
     @Override

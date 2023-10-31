@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mapper.ParticipationRequestMapper;
-import ru.practicum.model.request.dto.EventRequestStatusUpdateResultDto;
 import ru.practicum.model.request.EventRequestStatusUpdateRequest;
+import ru.practicum.model.request.dto.EventRequestStatusUpdateResultDto;
 import ru.practicum.model.request.dto.ParticipationRequestDto;
 import ru.practicum.service.ParticipationRequestService;
 
@@ -20,6 +20,7 @@ import java.util.Collection;
 public class ModerationRequestController {
     private final ParticipationRequestMapper requestMapper;
     private final ParticipationRequestService requestService;
+
     @GetMapping
     public Collection<ParticipationRequestDto> getRequests(@PathVariable Long userId,
                                                            @PathVariable Long eventId) {

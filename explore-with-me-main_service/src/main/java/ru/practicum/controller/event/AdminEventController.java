@@ -6,10 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.annotation.RequestMarker;
-import ru.practicum.model.event.UpdateEventRequest;
-import ru.practicum.model.event.EventState;
-import ru.practicum.model.event.dto.EventFullDto;
 import ru.practicum.mapper.EventMapper;
+import ru.practicum.model.event.EventState;
+import ru.practicum.model.event.UpdateEventRequest;
+import ru.practicum.model.event.dto.EventFullDto;
 import ru.practicum.service.EventService;
 
 import javax.validation.Valid;
@@ -39,11 +39,11 @@ public class AdminEventController {
             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Invoked method getEvents of class AdminEventController " +
-                "with parameters: usersId = {}, states = {}, categoriesId = {}, " +
+                        "with parameters: usersId = {}, states = {}, categoriesId = {}, " +
                         "rangeStart = {}, rangeEnd = {}, from = {}, size = {}",
                 usersId, states, categoriesId, rangeStart, rangeEnd, from, size);
 
-        if(rangeStart != null && rangeEnd != null && !rangeStart.isBefore(rangeEnd)) {
+        if (rangeStart != null && rangeEnd != null && !rangeStart.isBefore(rangeEnd)) {
             throw new ValidationException(
                     String.format("Invalid request params values: range start = %s, rangeEnd = %s",
                             rangeStart, rangeEnd));
@@ -58,7 +58,7 @@ public class AdminEventController {
     public EventFullDto patchEvent(@PathVariable Long eventId,
                                    @Valid @RequestBody UpdateEventRequest eventDto) {
         log.info("Invoked method patchEvent of class AdminEventController " +
-                        "with parameters: eventId = {}, states = {};", eventId, eventDto);
+                "with parameters: eventId = {}, states = {};", eventId, eventDto);
         return eventMapper.toEventFullDto(
                 eventService.updateEventByAdmin(eventId, eventDto));
     }

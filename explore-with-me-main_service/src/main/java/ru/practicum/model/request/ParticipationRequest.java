@@ -1,16 +1,15 @@
 package ru.practicum.model.request;
 
 import lombok.*;
-import ru.practicum.model.request.ParticipationRequestStatus;
-import ru.practicum.model.user.User;
 import ru.practicum.model.event.Event;
+import ru.practicum.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "participation_requests", schema = "public",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"requester_id","event_id"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"requester_id", "event_id"}))
 @Builder
 @Getter
 @Setter

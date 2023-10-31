@@ -1,6 +1,7 @@
 package ru.practicum.model.category.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder

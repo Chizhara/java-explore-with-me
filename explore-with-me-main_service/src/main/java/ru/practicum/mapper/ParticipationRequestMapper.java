@@ -2,10 +2,10 @@ package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.model.request.dto.EventRequestStatusUpdateResultDto;
 import ru.practicum.model.request.EventRequestStatusUpdateResult;
-import ru.practicum.model.request.dto.ParticipationRequestDto;
 import ru.practicum.model.request.ParticipationRequest;
+import ru.practicum.model.request.dto.EventRequestStatusUpdateResultDto;
+import ru.practicum.model.request.dto.ParticipationRequestDto;
 
 import java.util.Collection;
 

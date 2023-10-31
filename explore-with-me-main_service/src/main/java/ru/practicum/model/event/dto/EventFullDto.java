@@ -2,9 +2,9 @@ package ru.practicum.model.event.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.model.category.dto.CategoryDto;
 import ru.practicum.model.event.EventState;
 import ru.practicum.model.event.Location;
-import ru.practicum.model.category.dto.CategoryDto;
 import ru.practicum.model.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;

@@ -1,14 +1,12 @@
 package ru.practicum.model.event;
 
 import lombok.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Where;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.request.ParticipationRequest;
 import ru.practicum.model.user.User;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 

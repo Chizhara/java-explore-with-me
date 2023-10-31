@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public interface ParticipationRequestService {
     ParticipationRequest addRequest(long userId, long eventId);
+
     Collection<ParticipationRequest> getRequests(long userId);
 
     ParticipationRequest updateRequestStatus(long userId, long eventId, ParticipationRequestStatus status);

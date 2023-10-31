@@ -33,14 +33,14 @@ public class PublicEventController {
     @GetMapping
     public Collection<EventShortDto> getEvents(
             @RequestParam(required = false) String text,
-           @RequestParam(required = false) Collection<Long> categoriesId,
-           @RequestParam(required = false) Boolean paid,
-           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-           @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-           @RequestParam(defaultValue = "NONE") EventSort sort,
-           @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-           @RequestParam(defaultValue = "10") @Positive int size) {
+            @RequestParam(required = false) Collection<Long> categoriesId,
+            @RequestParam(required = false) Boolean paid,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(defaultValue = "NONE") EventSort sort,
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Invoked method getEvents of class PublicEventController " +
                         "with parameters: text = {}, categoriesId = {}, paid = {}, " +
                         "rangeStart = {}, rangeEnd = {}, " +
@@ -48,11 +48,11 @@ public class PublicEventController {
                         "from = {}, size = {}",
                 text, categoriesId, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
 
-        if(rangeStart == null) {
+        if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
 
-        if(rangeEnd != null && !rangeStart.isBefore(rangeEnd)) {
+        if (rangeEnd != null && !rangeStart.isBefore(rangeEnd)) {
             throw new ValidationException(
                     String.format("Invalid request params values: range start = %s, rangeEnd = %s",
                             rangeStart, rangeEnd));
@@ -63,7 +63,7 @@ public class PublicEventController {
                         rangeStart, rangeEnd, onlyAvailable, sort, from, size));
 
         statService.save();
-        return  events;
+        return events;
     }
 
     @GetMapping("/{eventId}")

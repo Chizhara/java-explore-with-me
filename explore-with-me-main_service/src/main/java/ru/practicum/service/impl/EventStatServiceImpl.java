@@ -6,14 +6,15 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventSort;
-import ru.practicum.model.event.UpdateEventRequest;
 import ru.practicum.model.event.EventState;
+import ru.practicum.model.event.UpdateEventRequest;
 import ru.practicum.service.EventService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -53,10 +54,19 @@ public class EventStatServiceImpl implements EventService {
     }
 
     @Override
+    public Collection<Event> getEvents(Set<Long> eventsId) {
+        log.debug("Invoked method getEvents of class EventStatServiceImpl " +
+                "with parameters: eventsId = {};", eventsId);
+        Collection<Event> event = eventService.getEvents(eventsId);
+        initViews(event);
+        return event;
+    }
+
+    @Override
     public Collection<Event> getEvents(int from, int size) {
         log.debug("Invoked method getEvents of class EventStatServiceImpl " +
                 "with parameters: from = {}, size = {};", from, size);
-        Collection<Event> events = eventService.getEvents( from, size);
+        Collection<Event> events = eventService.getEvents(from, size);
         initViews(events);
         return events;
     }
@@ -120,16 +130,16 @@ public class EventStatServiceImpl implements EventService {
         return event;
     }
 
-    private void initViews(Event event) {
+    public void initViews(Event event) {
         log.debug("Invoked method validateInitiator of class EventStatServiceImpl " +
                 "with parameters: eventId = {};", event.getId());
         event.setViews(statService.getViews(event.getId(), event.getCreatedOn()));
     }
 
-    private void initViews(Collection<Event> events) {
+    public void initViews(Collection<Event> events) {
         log.debug("Invoked method initViews of class EventStatServiceImpl " +
                 "with parameters: events = {};", events);
-        if(events.isEmpty()) {
+        if (events.isEmpty()) {
             return;
         }
         Map<Long, Long> viewsStat =
