@@ -10,6 +10,7 @@ import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -41,6 +42,10 @@ public class StatsController {
             @RequestParam(required = false, defaultValue = "false") boolean unique) {
         log.info("Invoked method getStatsView of class StatsController " +
                 "with parameters: start = {}, end = {}, uris = {}, unique = {}", start, end, uris, unique);
+        if (start != null && end != null && !end.isAfter(start)) {
+            throw new ValidationException(
+                    String.format("Start date should be after end: start = %s, end = %s", start, end));
+        }
         return toViewStatsDto(statsService.getViewStats(start, end, uris, unique));
     }
 }
