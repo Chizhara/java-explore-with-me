@@ -133,6 +133,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     private ParticipationRequest initRequest(long userId, long eventId) {
+        log.trace("Invoked method initRequest of class ParticipationRequestServiceImpl " +
+                "with parameters: userId = {}, eventId = {};", userId, eventId);
         Optional<ParticipationRequest> requestOptional = checkCanceledRequest(userId, eventId);
         if (requestOptional.isPresent()) {
             ParticipationRequest request = requestOptional.get();
@@ -148,6 +150,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     private void initRequestStatus(ParticipationRequest request) {
+        log.trace("Invoked method initRequestStatus of class ParticipationRequestServiceImpl " +
+                "with parameters: request = {};", request);
         if (request.getEvent().getRequestModeration() && request.getEvent().getParticipantLimit() != 0) {
             request.setStatus(ParticipationRequestStatus.PENDING);
         } else {
@@ -156,17 +160,23 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     private Optional<ParticipationRequest> checkCanceledRequest(long userId, long eventId) {
+        log.trace("Invoked method checkCanceledRequest of class ParticipationRequestServiceImpl " +
+                "with parameters: userId = {}, eventId = {};", userId, eventId);
         return participationRequestRepository.findByEventIdAndEventInitiatorIdAndStatus(userId, eventId,
                 ParticipationRequestStatus.CANCELED);
     }
 
     private void validateRequestIdsNotIn(ParticipationRequest request, Collection<Long> reqsId) {
+        log.trace("Invoked method validateRequestIdsNotIn of class ParticipationRequestServiceImpl " +
+                "with parameters: request = {}, reqsId = {};", request, reqsId);
         if (!reqsId.contains(request.getId())) {
             throw new InvalidActionException("Request must have status PENDING");
         }
     }
 
     private void validateParticipationRequest(ParticipationRequest request) {
+        log.trace("Invoked method validateParticipationRequest of class ParticipationRequestServiceImpl " +
+                "with parameters: request = {};", request);
         if (request.getEvent().getState() != EventState.PUBLISHED) {
             throw new InvalidActionException(
                     String.format("Cannot create a participation request for an event with id = %d",
@@ -181,6 +191,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     private void validateEventRequestsModeration(Event event) {
+        log.trace("Invoked method validateEventRequestsModeration of class ParticipationRequestServiceImpl " +
+                "with parameters: event = {};", event);
         if (event.getState() != EventState.PUBLISHED) {
             throw new InvalidActionException(
                     String.format("Event with id = %d should be PUBLISHED", event.getId()));
@@ -194,6 +206,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
 
     private void validateEventRequestsCount(Event event) {
+        log.trace("Invoked method validateEventRequestsCount of class ParticipationRequestServiceImpl " +
+                "with parameters: event = {};", event);
         event.getConfirmedRequests().forEach(request -> System.out.println(request.getId()));
         if (event.getParticipantLimit() != 0 && event.getConfirmedRequests().size() >= event.getParticipantLimit()) {
             throw new InvalidActionException("The participant limit has been reached");

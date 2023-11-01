@@ -29,18 +29,24 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getEvent(long eventId) {
+        log.debug("Invoked method getEvent of class EventServiceImpl " +
+                "with parameters: eventId = {};", eventId);
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event", eventId));
     }
 
     @Override
     public Event getEvent(long eventId, EventState state) {
+        log.debug("Invoked method getEvent of class EventServiceImpl " +
+                "with parameters: eventId = {}, state = {};", eventId, state);
         return eventRepository.findByIdAndState(eventId, state)
                 .orElseThrow(() -> new NotFoundException("Event", eventId));
     }
 
     @Override
     public Event getEvent(long userId, long eventId) {
+        log.debug("Invoked method getEvent of class EventServiceImpl " +
+                "with parameters: eventId = {}, eventId = {};", eventId, eventId);
         Event event = getEvent(eventId);
         validateInitiator(event, userId);
         return event;
@@ -48,11 +54,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Collection<Event> getEvents(int from, int size) {
+        log.debug("Invoked method getEvents of class EventServiceImpl " +
+                "with parameters: from = {}, size = {};", from, size);
         return eventRepository.findAll(PageableGenerator.getPageable(from, size)).getContent();
     }
 
     @Override
     public Collection<Event> getEvents(Set<Long> eventsId) {
+        log.debug("Invoked method getEvents of class EventServiceImpl " +
+                "with parameters: eventsId = {};", eventsId);
         return eventRepository.findAllById(eventsId);
     }
 
@@ -64,7 +74,13 @@ public class EventServiceImpl implements EventService {
                                           LocalDateTime rangeStart,
                                           LocalDateTime rangeEnd,
                                           int from, int size) {
+        log.debug("Invoked method searchEvents of class EventServiceImpl " +
+                        "with parameters: users = {}, states = {}, categoriesId = {}, " +
+                        "rangeStart = {}, rangeEnd = {}, from = {}, size = {}",
+                users, states, categoriesId, rangeStart, rangeEnd, from, size);
+
         BooleanExpression booleanExpression = QEvent.event.isNotNull();
+
         if (users != null) {
             booleanExpression = booleanExpression.and(QEvent.event.initiator.id.in(users));
         }
@@ -154,35 +170,47 @@ public class EventServiceImpl implements EventService {
     }
 
     private void initEventFields(Event event, long userId, long catId) {
+        log.trace("Invoked method initEventFields of class EventServiceImpl " +
+                "with parameters: event = {}, userId = {}, catId = {};", event, userId, catId);
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
         initEventForeignDependencies(event, userId, catId);
     }
 
     private void initEventForeignDependencies(Event event, long userId, long catId) {
+        log.trace("Invoked method initEventForeignDependencies of class EventServiceImpl " +
+                "with parameters: event = {}, userId = {}, catId = {};", event, userId, catId);
         event.setInitiator(userService.getUser(userId));
         event.setCategory(categoryService.getCategory(catId));
     }
 
     private void validateInitiator(Event event, long userId) {
+        log.trace("Invoked method validateInitiator of class EventServiceImpl " +
+                "with parameters: event = {}, userId = {};", event, userId);
         if (event.getInitiator().getId() != userId) {
             throw new ForbiddenAccessException(userId, event.getId());
         }
     }
 
     private void validateEventDate(LocalDateTime eventDate) {
+        log.trace("Invoked method validateEventDate of class EventServiceImpl " +
+                "with parameters: eventDate = {};", eventDate);
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new InvalidValueException("eventDate", eventDate);
         }
     }
 
     private void isEventUpdatable(Event event) {
+        log.trace("Invoked method isEventUpdatable of class EventServiceImpl " +
+                "with parameters: event = {};", event);
         if (event.getState() == EventState.PUBLISHED) {
             throw new InvalidActionException("Event must not be PUBLISHED");
         }
     }
 
     private void updateEventFields(Event updatedEvent, UpdateEventRequest dataEvent) {
+        log.trace("Invoked method updateEventFields of class EventServiceImpl " +
+                "with parameters: updatedEvent = {}, dataEvent = {};", updatedEvent, dataEvent);
         if (dataEvent.getTitle() != null) {
             updatedEvent.setTitle(dataEvent.getTitle());
         }
@@ -217,6 +245,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private void updateEventState(Event updatedEvent, StateAction stateAction) {
+        log.trace("Invoked method updateEventFields of class EventServiceImpl " +
+                "with parameters: updatedEvent = {}, stateAction = {};", updatedEvent, stateAction);
+
         switch (stateAction) {
             case PUBLISH_EVENT:
                 if (updatedEvent.getState() != EventState.PENDING) {

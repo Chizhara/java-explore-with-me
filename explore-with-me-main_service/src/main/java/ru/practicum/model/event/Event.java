@@ -51,11 +51,31 @@ public class Event {
     private Boolean requestModeration;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    @Where(clause = "status = '1'")
+    @Where(clause = "status = 'CONFIRMED'")
     private List<ParticipationRequest> confirmedRequests;
     @Column(name = "state")
+    @Enumerated(EnumType.STRING)
     private EventState state;
     @Transient
     private Long views;
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", annotation='" + annotation + '\'' +
+                ", description='" + description + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", eventDate=" + eventDate +
+                ", paid=" + paid +
+                ", participantLimit=" + participantLimit +
+                ", publishedOn=" + publishedOn +
+                ", createdOn=" + createdOn +
+                ", requestModeration=" + requestModeration +
+                ", state=" + state +
+                ", views=" + views +
+                '}';
+    }
 }

@@ -31,12 +31,14 @@ public class ModerationRequestController {
     }
 
     @PatchMapping
-    public EventRequestStatusUpdateResultDto patchRequests(@PathVariable Long userId,
+    public EventRequestStatusUpdateResultDto patchRequest(@PathVariable Long userId,
                                                            @PathVariable Long eventId,
                                                            @RequestBody EventRequestStatusUpdateRequest requestUpdateRequest) {
-        log.info("Invoked method patchRequests of class ModerationRequestController " +
-                "with parameters: userId = {}, eventId = {}, requestUpdateRequest = {};", userId, eventId, requestUpdateRequest);
+        log.info("Invoked method patchRequest of class ModerationRequestController " +
+                "with parameters: userId = {}, eventId = {}, requestUpdateRequest = {};",
+                userId, eventId, requestUpdateRequest);
 
-        return requestMapper.toEventRequestStatusUpdateResultDto(requestService.updateRequests(userId, eventId, requestUpdateRequest));
+        return requestMapper.toEventRequestStatusUpdateResultDto(
+                requestService.updateRequests(userId, eventId, requestUpdateRequest));
     }
 }

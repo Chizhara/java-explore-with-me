@@ -18,7 +18,6 @@ public class LocalDateTimeAfterValidator implements ConstraintValidator<LocalDat
     @Override
     public boolean isValid(LocalDateTime date,
                            ConstraintValidatorContext cxt) {
-        log.info("VALIDATION date = {}", date);
         return date == null || date.isAfter(LocalDateTime.now().plusHours(2));
     }
 }

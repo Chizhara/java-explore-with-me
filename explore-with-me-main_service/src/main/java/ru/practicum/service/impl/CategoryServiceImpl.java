@@ -65,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void validateCategoryExistsById(long catId) {
-        log.debug("Invoked method validateCategoryExistsById of class CategoryServiceImp " +
+        log.trace("Invoked method validateCategoryExistsById of class CategoryServiceImp " +
                 "with parameters: catId = {};", catId);
         if (!categoryRepository.existsById(catId)) {
             throw new NotFoundException("Category", catId);

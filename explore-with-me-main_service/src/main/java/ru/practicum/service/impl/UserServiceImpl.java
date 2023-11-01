@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void validateUserExistsById(long userId) {
-        log.debug("Invoked method validateUserExistsById of class UserServiceImp " +
+        log.trace("Invoked method validateUserExistsById of class UserServiceImp " +
                 "with parameters: userId = {};", userId);
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User", userId);

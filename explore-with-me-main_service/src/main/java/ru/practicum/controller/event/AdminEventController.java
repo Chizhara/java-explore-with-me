@@ -58,7 +58,7 @@ public class AdminEventController {
     public EventFullDto patchEvent(@PathVariable Long eventId,
                                    @Valid @RequestBody UpdateEventRequest eventDto) {
         log.info("Invoked method patchEvent of class AdminEventController " +
-                "with parameters: eventId = {}, states = {};", eventId, eventDto);
+                "with parameters: eventId = {}, eventDto = {};", eventId, eventDto);
         return eventMapper.toEventFullDto(
                 eventService.updateEventByAdmin(eventId, eventDto));
     }

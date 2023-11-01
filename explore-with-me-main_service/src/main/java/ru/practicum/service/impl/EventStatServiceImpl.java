@@ -77,6 +77,11 @@ public class EventStatServiceImpl implements EventService {
                                           Collection<Long> categories,
                                           LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                           int from, int size) {
+        log.debug("Invoked method searchEvents of class EventStatServiceImpl " +
+                        "with parameters: users = {}, states = {}, categories = {}, " +
+                        "rangeStart = {}, rangeEnd = {}, from = {}, size = {}",
+                users, states, categories, rangeStart, rangeEnd, from, size);
+
         Collection<Event> events =
                 eventService.searchEvents(users, states, categories, rangeStart, rangeEnd, from, size);
         initViews(events);
@@ -86,13 +91,20 @@ public class EventStatServiceImpl implements EventService {
 
     @Override
     public Collection<Event> searchEvents(String text,
-                                          Collection<Long> states,
+                                          Collection<Long> categoriesId,
                                           Boolean paid,
                                           LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                           Boolean onlyAvailable,
                                           EventSort sort,
                                           int from, int size) {
-        Collection<Event> events = eventService.searchEvents(text, states, paid, rangeStart, rangeEnd,
+        log.debug("Invoked method searchEvents of class EventStatServiceImpl " +
+                        "with parameters: text = {}, categoriesId = {}, paid = {}, " +
+                        "rangeStart = {}, rangeEnd = {}, " +
+                        "onlyAvailable = {}, sort = {}, " +
+                        "from = {}, size = {}",
+                text, categoriesId, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+
+        Collection<Event> events = eventService.searchEvents(text, categoriesId, paid, rangeStart, rangeEnd,
                 onlyAvailable, sort, from, size);
 
         initViews(events);
@@ -109,6 +121,8 @@ public class EventStatServiceImpl implements EventService {
 
     @Override
     public Event addEvent(long userId, long catId, Event event) {
+        log.debug("Invoked method addEvent of class EventServiceStatImpl " +
+                "with parameters: userId = {}, catId = {}, event = {};", userId, catId, event);
         return eventService.addEvent(userId, catId, event);
     }
 

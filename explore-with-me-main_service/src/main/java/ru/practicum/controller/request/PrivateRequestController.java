@@ -41,7 +41,8 @@ public class PrivateRequestController {
     }
 
     @PatchMapping("{eventId}/cancel")
-    public ParticipationRequestDto rejectEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+    public ParticipationRequestDto rejectEvent(@PathVariable Long userId,
+                                               @PathVariable Long eventId) {
         log.info("Invoked method rejectEvent of class PrivateRequestController " +
                 "with parameters: userId = {}, eventId = {};", userId, eventId);
         return participationRequestMapper.toParticipationRequestDto(

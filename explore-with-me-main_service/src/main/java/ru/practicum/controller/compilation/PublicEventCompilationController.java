@@ -24,7 +24,7 @@ public class PublicEventCompilationController {
 
     @GetMapping("/{compId}")
     public CompilationDto getCompilation(@PathVariable Long compId) {
-        log.info("Invoked method patchCompilation of class PublicEventCompilationController " +
+        log.info("Invoked method getCompilation of class PublicEventCompilationController " +
                 "with parameters: compId = {};", compId);
         return compilationMapper.toCompilationDto(
                 compilationService.getCompilation(compId));
@@ -34,7 +34,7 @@ public class PublicEventCompilationController {
     public Collection<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
                                                       @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                       @RequestParam(defaultValue = "10") @Positive int size) {
-        log.info("Invoked method postCompilation of class PublicEventCompilationController " +
+        log.info("Invoked method getCompilations of class PublicEventCompilationController " +
                 "with parameters: pinned = {}, from = {}, size = {};", pinned, from, size);
         return compilationMapper.toCompilationDto(
                 compilationService.getCompilations(pinned, size, from));

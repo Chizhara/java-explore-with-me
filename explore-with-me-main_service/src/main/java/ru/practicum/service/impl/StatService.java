@@ -24,6 +24,9 @@ public class StatService {
     protected final StatClient statClient;
 
     public void save() {
+        log.debug("Invoked method getViews of class StatService " +
+                "with parameters:  uri = {};", request.getRequestURI());
+
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
                 .app(APP)
                 .uri(request.getRequestURI())

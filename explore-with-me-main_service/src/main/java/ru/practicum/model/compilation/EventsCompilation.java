@@ -26,4 +26,14 @@ public class EventsCompilation {
     @JoinTable(name = "events_compilations", joinColumns = {@JoinColumn(name = "compilation_id")},
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private Collection<Event> events;
+
+    @Override
+    public String toString() {
+        return "EventsCompilation{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", pinned=" + pinned +
+                ", events=" + events +
+                '}';
+    }
 }

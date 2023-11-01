@@ -76,11 +76,16 @@ public class EventsCompilationServiceImpl implements EventsCompilationService {
     @Override
     @Transactional
     public void removeCompilation(long compId) {
+        log.debug("Invoked method removeCompilation of class EventsCompilationServiceImpl " +
+                "with parameters: compId = {};", compId);
         validateCompilationExisting(compId);
         compilationRepository.deleteById(compId);
     }
 
     private void updateCompilationFields(EventsCompilation updatedCompilation, UpdateCompilationRequest dataCompilation) {
+        log.trace("Invoked method updateCompilationFields of class EventsCompilationServiceImpl " +
+                "with parameters: updatedCompilation = {}, dataCompilation = {};", updatedCompilation, dataCompilation);
+
         if (dataCompilation.getTitle() != null) {
             updatedCompilation.setTitle(dataCompilation.getTitle());
         }
@@ -94,6 +99,8 @@ public class EventsCompilationServiceImpl implements EventsCompilationService {
     }
 
     private void validateCompilationExisting(long compId) {
+        log.trace("Invoked method validateCompilationExisting of class EventsCompilationServiceImpl " +
+                "with parameters: compId = {};", compId);
         if (!compilationRepository.existsById(compId)) {
             throw new NotFoundException("EventsCompilation", compId);
         }

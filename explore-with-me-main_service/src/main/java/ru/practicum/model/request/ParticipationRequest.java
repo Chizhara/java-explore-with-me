@@ -27,7 +27,17 @@ public class ParticipationRequest {
     @JoinColumn(name = "event_id", nullable = false, updatable = false)
     private Event event;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private ParticipationRequestStatus status;
     @Column(name = "created")
     private LocalDateTime created;
+
+    @Override
+    public String toString() {
+        return "ParticipationRequest{" +
+                "id=" + id +
+                ", status=" + status +
+                ", created=" + created +
+                '}';
+    }
 }
