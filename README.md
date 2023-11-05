@@ -1,2 +1,2 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+Ссылка на PR: https://github.com/Chizhara/java-explore-with-me/pull/8#issue-1977965718

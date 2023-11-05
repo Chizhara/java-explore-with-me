@@ -1,13 +1,16 @@
 package ru.practicum.service.impl;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.PageableGenerator;
 import ru.practicum.exception.*;
-import ru.practicum.model.event.*;
+import ru.practicum.model.event.Event;
+import ru.practicum.model.event.EventState;
+import ru.practicum.model.event.StateAction;
+import ru.practicum.model.event.UpdateEventRequest;
+import ru.practicum.param.EventParam;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.service.CategoryService;
 import ru.practicum.service.EventService;
@@ -68,72 +71,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<Event> searchEvents(Collection<Long> users,
-                                          Collection<EventState> states,
-                                          Collection<Long> categoriesId,
-                                          LocalDateTime rangeStart,
-                                          LocalDateTime rangeEnd,
+    public Collection<Event> searchEvents(EventParam eventParam,
                                           int from, int size) {
         log.debug("Invoked method searchEvents of class EventServiceImpl " +
-                        "with parameters: users = {}, states = {}, categoriesId = {}, " +
-                        "rangeStart = {}, rangeEnd = {}, from = {}, size = {}",
-                users, states, categoriesId, rangeStart, rangeEnd, from, size);
+                "with parameters: eventParam {}, from = {}, size = {}", eventParam, from, size);
 
-        BooleanExpression booleanExpression = QEvent.event.isNotNull();
-
-        if (users != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.initiator.id.in(users));
-        }
-        if (states != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.state.in(states));
-        }
-        if (categoriesId != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.category.id.in(categoriesId));
-        }
-
-        return eventRepository.findAll(booleanExpression,
+        return eventRepository.findAll(eventParam.getExpression(),
                 PageableGenerator.getPageable(from, size)).getContent();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Collection<Event> searchEvents(String text,
-                                          Collection<Long> categoriesId,
-                                          Boolean paid,
-                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                          Boolean onlyAvailable,
-                                          EventSort sort,
-                                          int from, int size) {
-        log.debug("Invoked method searchEvents of class EventServiceImpl " +
-                        "with parameters: text = {}, categoriesId = {}, paid = {}, " +
-                        "rangeStart = {}, rangeEnd = {}, " +
-                        "onlyAvailable = {}, sort = {}, " +
-                        "from = {}, size = {}",
-                text, categoriesId, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-
-        BooleanExpression booleanExpression = QEvent.event.state.eq(EventState.PUBLISHED);
-        if (text != null) {
-            booleanExpression = booleanExpression.andAnyOf(QEvent.event.annotation.containsIgnoreCase(text)
-                    .or(QEvent.event.description.containsIgnoreCase(text)));
-        }
-        if (categoriesId != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.category.id.in(categoriesId));
-        }
-        if (paid != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.paid.eq(paid));
-        }
-        if (onlyAvailable != null && onlyAvailable) {
-            booleanExpression = booleanExpression
-                    .and(QEvent.event.participantLimit.eq(0)
-                            .or(QEvent.event.confirmedRequests.size().loe(QEvent.event.participantLimit)));
-        }
-        if (rangeEnd != null) {
-            booleanExpression = booleanExpression.and(QEvent.event.eventDate.before(rangeEnd));
-        }
-
-        booleanExpression = booleanExpression.and(QEvent.event.eventDate.after(rangeStart));
-
-        return eventRepository.findAll(booleanExpression, PageableGenerator.getPageable(from, size)).getContent();
     }
 
     @Override
