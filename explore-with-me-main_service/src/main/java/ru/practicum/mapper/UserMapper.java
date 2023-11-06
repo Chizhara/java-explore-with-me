@@ -16,6 +16,8 @@ public interface UserMapper {
 
     Collection<UserDto> toUserDto(Collection<User> users);
 
+    Collection<UserShortDto> toUserShortDto(Collection<User> users);
+
     UserShortDto toUserShortDto(User user);
 
     @Mapping(target = "id", ignore = true)

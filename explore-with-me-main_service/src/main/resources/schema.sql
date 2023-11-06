@@ -52,4 +52,11 @@ CREATE TABLE IF NOT EXISTS events_compilations(
     event_id BIGINT REFERENCES events(id) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS subscriptions(
+    subscriber_id BIGINT REFERENCES users(id) NOT NULL,
+    recipient_id BIGINT REFERENCES users(id) NOT NULL,
+    PRIMARY KEY(subscriber_id, recipient_id),
+    CHECK (subscriber_id <> recipient_id)
+);
+
 

@@ -10,6 +10,7 @@ import ru.practicum.model.event.EventSort;
 import ru.practicum.model.event.EventState;
 import ru.practicum.model.event.dto.EventFullDto;
 import ru.practicum.model.event.dto.EventShortDto;
+import ru.practicum.param.EventParam;
 import ru.practicum.service.EventService;
 import ru.practicum.service.impl.StatService;
 
@@ -58,9 +59,17 @@ public class PublicEventController {
                             rangeStart, rangeEnd));
         }
 
+        EventParam eventParam = new EventParam();
+        eventParam.setSearchingText(text);
+        eventParam.setPaid(paid);
+        eventParam.setOnlyAvailable(onlyAvailable);
+        eventParam.setSort(sort);
+        eventParam.setCategoriesId(categoriesId);
+        eventParam.setRangeStart(rangeStart);
+        eventParam.setRangeEnd(rangeEnd);
+
         Collection<EventShortDto> events = eventMapper.toEventShortDto(
-                eventService.searchEvents(text, categoriesId, paid,
-                        rangeStart, rangeEnd, onlyAvailable, sort, from, size));
+                eventService.searchEvents(eventParam, from, size));
 
         statService.save();
         return events;

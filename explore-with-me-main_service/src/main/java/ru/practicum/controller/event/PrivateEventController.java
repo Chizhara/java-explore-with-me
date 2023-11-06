@@ -14,6 +14,8 @@ import ru.practicum.model.event.dto.NewEventDto;
 import ru.practicum.service.EventService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 @Slf4j
@@ -28,8 +30,8 @@ public class PrivateEventController {
 
     @GetMapping
     public Collection<EventShortDto> getEvents(@PathVariable Long userId,
-                                               @RequestParam(defaultValue = "0") int from,
-                                               @RequestParam(defaultValue = "10") int size) {
+                                               @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                               @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Invoked method getEvents of class PrivateEventController " +
                 "with parameters: userId = {}, from = {}, size = {};", userId, from, size);
         return eventMapper.toEventShortDto(

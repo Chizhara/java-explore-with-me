@@ -10,6 +10,7 @@ import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.event.EventState;
 import ru.practicum.model.event.UpdateEventRequest;
 import ru.practicum.model.event.dto.EventFullDto;
+import ru.practicum.param.EventParam;
 import ru.practicum.service.EventService;
 
 import javax.validation.Valid;
@@ -49,8 +50,15 @@ public class AdminEventController {
                             rangeStart, rangeEnd));
         }
 
+        EventParam eventParam = new EventParam();
+        eventParam.setInitiatorsId(usersId);
+        eventParam.setStates(states);
+        eventParam.setCategoriesId(categoriesId);
+        eventParam.setRangeStart(rangeStart);
+        eventParam.setRangeEnd(rangeEnd);
+
         return eventMapper.toEventFullDto(
-                eventService.searchEvents(usersId, states, categoriesId, rangeStart, rangeEnd, from, size));
+                eventService.searchEvents(eventParam, from, size));
     }
 
     @PatchMapping("/{eventId}")

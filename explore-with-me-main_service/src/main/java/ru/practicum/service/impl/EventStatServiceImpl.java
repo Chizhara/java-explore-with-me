@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.practicum.model.event.Event;
-import ru.practicum.model.event.EventSort;
 import ru.practicum.model.event.EventState;
 import ru.practicum.model.event.UpdateEventRequest;
+import ru.practicum.param.EventParam;
 import ru.practicum.service.EventService;
 
 import java.time.LocalDateTime;
@@ -72,43 +72,15 @@ public class EventStatServiceImpl implements EventService {
     }
 
     @Override
-    public Collection<Event> searchEvents(Collection<Long> users,
-                                          Collection<EventState> states,
-                                          Collection<Long> categories,
-                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
+    public Collection<Event> searchEvents(EventParam eventParam,
                                           int from, int size) {
         log.debug("Invoked method searchEvents of class EventStatServiceImpl " +
-                        "with parameters: users = {}, states = {}, categories = {}, " +
-                        "rangeStart = {}, rangeEnd = {}, from = {}, size = {}",
-                users, states, categories, rangeStart, rangeEnd, from, size);
+                "with parameters: eventParam = {}, from = {}, size = {}", eventParam, from, size);
 
-        Collection<Event> events =
-                eventService.searchEvents(users, states, categories, rangeStart, rangeEnd, from, size);
-        initViews(events);
-
-        return events;
-    }
-
-    @Override
-    public Collection<Event> searchEvents(String text,
-                                          Collection<Long> categoriesId,
-                                          Boolean paid,
-                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                          Boolean onlyAvailable,
-                                          EventSort sort,
-                                          int from, int size) {
-        log.debug("Invoked method searchEvents of class EventStatServiceImpl " +
-                        "with parameters: text = {}, categoriesId = {}, paid = {}, " +
-                        "rangeStart = {}, rangeEnd = {}, " +
-                        "onlyAvailable = {}, sort = {}, " +
-                        "from = {}, size = {}",
-                text, categoriesId, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-
-        Collection<Event> events = eventService.searchEvents(text, categoriesId, paid, rangeStart, rangeEnd,
-                onlyAvailable, sort, from, size);
+        Collection<Event> events = eventService.searchEvents(eventParam, from, size);
 
         initViews(events);
-        switch (sort) {
+        switch (eventParam.getSort()) {
             case VIEWS:
                 events = events.stream().sorted(Comparator.comparing(Event::getViews)).collect(Collectors.toList());
                 break;

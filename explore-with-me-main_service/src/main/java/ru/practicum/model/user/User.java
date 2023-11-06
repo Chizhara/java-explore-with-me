@@ -3,6 +3,7 @@ package ru.practicum.model.user;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -20,6 +21,14 @@ public class User {
     String name;
     @Column(name = "email", unique = true)
     String email;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "subscriptions", joinColumns = {@JoinColumn(name = "subscriber_id")},
+            inverseJoinColumns = @JoinColumn(name = "recipient_id"))
+    Collection<User> subscriptions;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "subscriptions", joinColumns = {@JoinColumn(name = "recipient_id")},
+            inverseJoinColumns = @JoinColumn(name = "subscriber_id"))
+    Collection<User> subscribers;
 
     @Override
     public String toString() {

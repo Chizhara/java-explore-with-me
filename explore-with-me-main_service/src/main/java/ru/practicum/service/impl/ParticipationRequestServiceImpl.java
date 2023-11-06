@@ -162,7 +162,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     private Optional<ParticipationRequest> checkCanceledRequest(long userId, long eventId) {
         log.trace("Invoked method checkCanceledRequest of class ParticipationRequestServiceImpl " +
                 "with parameters: userId = {}, eventId = {};", userId, eventId);
-        return participationRequestRepository.findByEventIdAndEventInitiatorIdAndStatus(userId, eventId,
+        return participationRequestRepository.findByEventIdAndEventInitiatorIdAndStatus(eventId, userId,
                 ParticipationRequestStatus.CANCELED);
     }
 

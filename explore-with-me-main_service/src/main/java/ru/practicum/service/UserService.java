@@ -12,4 +12,6 @@ public interface UserService {
     User addUser(User user);
 
     void removeUser(long userId);
+
+    void validateUserExistsById(long userId);
 }

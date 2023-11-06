@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
+    @Override
     public void validateUserExistsById(long userId) {
         log.trace("Invoked method validateUserExistsById of class UserServiceImp " +
                 "with parameters: userId = {};", userId);
